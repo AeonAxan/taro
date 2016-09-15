@@ -75,9 +75,10 @@ public class StackedBarChart extends View {
         // set up axis
         mXAxis = new XAxis(super.getContext());
         mXAxis.setDimensions(w, 80);
+        mXAxis.setDebug(true);
 
         List<Slot> slots = new ArrayList<>();
-        for (String day : Arrays.asList("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")) {
+        for (String day : Arrays.asList("Sun", "Mon", "Tue")) {
             slots.add(new Slot(day.hashCode(), day));
         }
 
