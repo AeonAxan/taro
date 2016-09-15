@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Attributes for AZStackedBar -->
+    <declare-styleable name="StackedBarChart">
+        <attr name="backgroundColor" format="color" />
+    </declare-styleable>
+</resources>
