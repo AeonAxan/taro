@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.azaan.taro.io.azaan.taro.viz.Helpers;
+import io.azaan.taro.io.azaan.taro.viz.models.Slot;
 
 /**
  * Takes care of the XAxis, all it's calculations
@@ -26,15 +27,6 @@ public class XAxis {
      * Is this view in debug mode
      */
     private boolean mDebug = false;
-
-
-    /**
-     * (x,y) coordinates of the top left of the X Axis.
-     * this is relative to the canvas that will be
-     * passed into draw.
-     */
-    private int mX = 0;
-    private int mY = 0;
 
 
     /**
@@ -59,9 +51,7 @@ public class XAxis {
 
 
     /**
-     * Calculated dimensions. All these dimensions
-     * and coordinates are in local coordinate system, so before
-     * drawing global offsets (mX, mY) must be added to them.
+     * Calculated dimensions.
      */
     private float mSlotWidth;
 
@@ -75,20 +65,14 @@ public class XAxis {
 
 
     /**
-     * A model class used to represent the axis state.
-     */
-    private class Slot {
-        // X coordinate of the slot start point
-        public float x;
-
-        // label will be displayed if not null
-        public String label = null;
-    }
-
-
-    /**
      * List of all 'slots' on the x axis. A slot is a position
-     * where a data point can reside in.
+     * in the axis where a label or a axis tick resides. All the given
+     * slots are displayed evenly separated.
+     *
+     * Slots should not be confused with 'points on the axis for data'.
+     * Data can be either continuous or discrete and can be mapped appropriately,
+     * slots are merely points for either ticks or labels on the axis. These
+     * points are usually calculated by the axis data mapper and passed in.
      */
     List<Slot> mSlots = new ArrayList<>();
 
@@ -120,19 +104,12 @@ public class XAxis {
 
 
     /**
-     * Sets the data for the axis.
-     * TODO: FIXME handle continuous and discrete data
-     * @param data array of labels and data slots
+     * Sets the slots for the axis
+     *
+     * @param slots slots
      */
-    public void setData(List<String> data) {
-        mSlots.clear();
-
-        for (String value : data) {
-            Slot slot = new Slot();
-            slot.label = value;
-
-            mSlots.add(slot);
-        }
+    public void setSlots(List<Slot> slots) {
+        mSlots = new ArrayList<>(slots);
 
         calculateSlotPositions();
     }
@@ -171,10 +148,10 @@ public class XAxis {
         for (int i = 0; i < mSlots.size(); i++) {
             Slot slot = mSlots.get(i);
 
-            slot.x = slotStartX;
+            slot._x = slotStartX;
 
             if (i > 0) {
-                slot.x += (mSlotWidth + slotSeparation) * i;
+                slot._x += (mSlotWidth + slotSeparation) * i;
             }
         }
     }
@@ -187,16 +164,16 @@ public class XAxis {
     public void draw(Canvas canvas) {
         if (mDebug) {
             // axis outline
-            canvas.drawRect(mX, mY, mX + mW, mY + mH, mDebugPaint);
+            canvas.drawRect(0, 0, mW, mH, mDebugPaint);
 
             // individual slots
             for (Slot slot : mSlots) {
-                canvas.drawRect(mX + slot.x, mY, mX + slot.x + mSlotWidth, mY + mH, mDebugPaint);
+                canvas.drawRect(slot._x, 0, slot._x + mSlotWidth, mH, mDebugPaint);
             }
         }
 
         // draw line on top of axis
-        canvas.drawLine(mX, mY, mX + mW, mY, mLinePaint);
+        canvas.drawLine(0, 0, mW, 0, mLinePaint);
 
         // draw the labels
         for (Slot slot : mSlots) {
@@ -207,8 +184,8 @@ public class XAxis {
             mLabelPaint.measureText(slot.label);
             canvas.drawText(
                     slot.label,
-                    mX + slot.x + (mSlotWidth / 2f),
-                    mY + (mH / 2f) - ((mLabelPaint.ascent() + mLabelPaint.descent()) / 2f),
+                    slot._x + (mSlotWidth / 2f),
+                    (mH / 2f) - ((mLabelPaint.ascent() + mLabelPaint.descent()) / 2f),
                     mLabelPaint
             );
         }
@@ -216,17 +193,12 @@ public class XAxis {
 
 
     /**
-     * Sets the origin coordinates of the axis (top left) and
-     * the width and height.
+     * Sets the width and height of the view
      *
-     * @param x x value
-     * @param y y value
      * @param w width
      * @param h height
      */
-    public void setDimensions(int x, int y, int w, int h) {
-        mX = x;
-        mY = y;
+    public void setDimensions(int w, int h) {
         mW = w;
         mH = h;
 
