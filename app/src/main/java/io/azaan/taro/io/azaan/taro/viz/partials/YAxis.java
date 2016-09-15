@@ -8,9 +8,10 @@ import android.graphics.Paint;
 import io.azaan.taro.io.azaan.taro.viz.models.Slot;
 
 /**
- * Generic XAxis implementation.
+ * Generic YAxis implementation
  */
-public class XAxis extends Axis {
+public class YAxis extends Axis {
+
 
     /**
      * Paint objects
@@ -23,8 +24,8 @@ public class XAxis extends Axis {
      * Constructor function
      * @param context Android Context
      */
-    public XAxis(Context context) {
-        super(context, Orientation.HORIZONTAL);
+    public YAxis(Context context) {
+        super(context, Orientation.VERTICAL);
 
         // set up paint objects
         mLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -54,7 +55,7 @@ public class XAxis extends Axis {
             canvas.drawText(
                     slot.label,
                     slot._x + (getSlotWidth() / 2f),
-                    (getSlotHeight() / 2f) - ((mLabelPaint.ascent() + mLabelPaint.descent()) / 2f),
+                    slot._y + (getSlotHeight() / 2f) - ((mLabelPaint.ascent() + mLabelPaint.descent()) / 2f),
                     mLabelPaint
             );
         }

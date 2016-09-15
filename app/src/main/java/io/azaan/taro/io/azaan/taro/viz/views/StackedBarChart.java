@@ -14,12 +14,15 @@ import java.util.List;
 
 import io.azaan.taro.R;
 import io.azaan.taro.io.azaan.taro.viz.models.Slot;
+import io.azaan.taro.io.azaan.taro.viz.partials.Axis;
 import io.azaan.taro.io.azaan.taro.viz.partials.XAxis;
+import io.azaan.taro.io.azaan.taro.viz.partials.YAxis;
 
 public class StackedBarChart extends View {
     private static final String TAG = StackedBarChart.class.getSimpleName();
 
-    private XAxis mXAxis;
+    private Axis mXAxis;
+    private Axis mYAxis;
 
     public StackedBarChart(Context context) {
         super(context);
@@ -77,17 +80,32 @@ public class StackedBarChart extends View {
         mXAxis.setDimensions(w, 80);
         mXAxis.setDebug(true);
 
-        List<Slot> slots = new ArrayList<>();
+        List<Slot> xSlots = new ArrayList<>();
         for (String day : Arrays.asList("Sun", "Mon", "Tue")) {
-            slots.add(new Slot(day.hashCode(), day));
+            xSlots.add(new Slot(day.hashCode(), day));
         }
 
-        mXAxis.setSlots(slots);
+        mXAxis.setSlots(xSlots);
 
         mXAxisBitmap = Bitmap.createBitmap(w, 80, Bitmap.Config.ARGB_8888);
+
+        mYAxis = new YAxis(super.getContext());
+        mYAxis.setOrientation(Axis.Orientation.VERTICAL);
+        mYAxis.setDimensions(80, h - 100);
+        mYAxis.setDebug(true);
+
+        List<Slot> ySlots = new ArrayList<>();
+        for (String day : Arrays.asList("100", "200", "300", "400")) {
+            ySlots.add(new Slot(day.hashCode(), day));
+        }
+
+        mYAxis.setSlots(ySlots);
+
+        mYAxisBitmap = Bitmap.createBitmap(mYAxis.getW(), mYAxis.getH(), Bitmap.Config.ARGB_8888);
     }
 
     private Bitmap mXAxisBitmap;
+    private Bitmap mYAxisBitmap;
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -100,6 +118,12 @@ public class StackedBarChart extends View {
         mXAxis.draw(xCanvas);
 
         canvas.drawBitmap(mXAxisBitmap, 0, 200, null);
+
+
+        Canvas yCanvas = new Canvas(mYAxisBitmap);
+        mYAxis.draw(yCanvas);
+
+        canvas.drawBitmap(mYAxisBitmap, 0, 0, null);
     }
 
     @Override
