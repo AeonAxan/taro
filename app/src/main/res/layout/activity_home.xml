@@ -7,8 +7,10 @@
     tools:context="io.azaan.taro.HomeActivity">
 
     <io.azaan.taro.io.azaan.taro.viz.views.StackedBarChart
+        android:id="@+id/chart"
         app:backgroundColor="@color/colorPrimary"
         android:layout_width="match_parent"
+        android:padding="8dp"
         android:layout_height="220dp" />
 
 </RelativeLayout>

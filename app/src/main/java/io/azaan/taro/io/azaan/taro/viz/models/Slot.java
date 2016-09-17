@@ -17,7 +17,8 @@ public class Slot {
     public boolean hasMajorTick;
 
     /**
-     * Data to be used by axis.
+     * Positioning data set by the axis. This is treated as internal
+     * data and generally should not be used outside of an BaseAxis class.
      */
     public float _x;
     public float _y;

@@ -1,4 +1,4 @@
-package io.azaan.taro.io.azaan.taro.viz.partials;
+package io.azaan.taro.io.azaan.taro.viz.base;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -17,7 +17,7 @@ import io.azaan.taro.io.azaan.taro.viz.models.Slot;
  * 
  * All axis classes must inherit from this base class
  */
-public abstract class Axis {
+public abstract class BaseAxis {
 
     /**
      * Android Context
@@ -37,8 +37,8 @@ public abstract class Axis {
     /**
      * width and height of the axis.
      */
-    private int mW = 0;
-    private int mH = 0;
+    private float mW = 0;
+    private float mH = 0;
 
 
     /**
@@ -63,7 +63,7 @@ public abstract class Axis {
 
 
     /**
-     * Axis orientation
+     * BaseAxis orientation
      * The orientation of this axis
      */
     private Orientation mOrientation;
@@ -74,7 +74,7 @@ public abstract class Axis {
 
 
     /**
-     * Axis slot align.
+     * BaseAxis slot align.
      * Which side the slots are aligned to
      */
     private Alignment mAlignment = Alignment.CENTER;
@@ -113,7 +113,7 @@ public abstract class Axis {
     private List<Slot> mSlots = new ArrayList<>();
 
 
-    public Axis(Context mContext, Orientation orientation) {
+    public BaseAxis(Context mContext, Orientation orientation) {
         this.mContext = mContext;
         this.mOrientation = orientation;
 
@@ -136,7 +136,7 @@ public abstract class Axis {
      * 
      * The function calculates and updates the values for all slots.
      */
-    private void calculateSlotPositions() {
+    private void layout() {
         float countF = (float) mSlots.size();
 
         boolean valid = mW > 0 && mH > 0;
@@ -299,11 +299,11 @@ public abstract class Axis {
      * @param w width
      * @param h height
      */
-    public void setDimensions(int w, int h) {
+    public void setDimensions(float w, float h) {
         mW = w;
         mH = h;
 
-        calculateSlotPositions();
+        layout();
     }
 
 
@@ -319,7 +319,7 @@ public abstract class Axis {
             Collections.reverse(mSlots);
         }
 
-        calculateSlotPositions();
+        layout();
     }
 
 
@@ -401,11 +401,11 @@ public abstract class Axis {
         return mSlots;
     }
 
-    public int getW() {
+    public float getW() {
         return mW;
     }
 
-    public int getH() {
+    public float getH() {
         return mH;
     }
 

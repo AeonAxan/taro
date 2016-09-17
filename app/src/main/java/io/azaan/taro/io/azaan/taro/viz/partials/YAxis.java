@@ -5,12 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import io.azaan.taro.io.azaan.taro.viz.base.BaseAxis;
 import io.azaan.taro.io.azaan.taro.viz.models.Slot;
 
 /**
  * Generic YAxis implementation
  */
-public class YAxis extends Axis {
+public class YAxis extends BaseAxis {
 
 
     /**
@@ -27,6 +28,8 @@ public class YAxis extends Axis {
     public YAxis(Context context) {
         super(context, Orientation.VERTICAL);
 
+        setAlignment(Alignment.START);
+
         // set up paint objects
         mLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mLabelPaint.setColor(Color.YELLOW);
@@ -39,11 +42,14 @@ public class YAxis extends Axis {
 
 
     /**
-     * Draws the Axis on to the canvas.
+     * Draws the BaseAxis on to the canvas.
      * @param canvas canvas
      */
     public void draw(Canvas canvas) {
         super.draw(canvas);
+
+        // draw the line
+        canvas.drawLine(getW(), 0, getW(), getH(), mLinePaint);
 
         // draw the labels
         for (Slot slot : getSlots()) {

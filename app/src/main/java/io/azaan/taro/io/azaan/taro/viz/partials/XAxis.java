@@ -5,12 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import io.azaan.taro.io.azaan.taro.viz.base.BaseAxis;
 import io.azaan.taro.io.azaan.taro.viz.models.Slot;
 
 /**
  * Generic XAxis implementation.
  */
-public class XAxis extends Axis {
+public class XAxis extends BaseAxis {
 
     /**
      * Paint objects
@@ -38,11 +39,14 @@ public class XAxis extends Axis {
 
 
     /**
-     * Draws the Axis on to the canvas.
+     * Draws the BaseAxis on to the canvas.
      * @param canvas canvas
      */
     public void draw(Canvas canvas) {
         super.draw(canvas);
+
+        // draw the axis line
+        canvas.drawLine(0, 0, getW(), 0, mLinePaint);
 
         // draw the labels
         for (Slot slot : getSlots()) {
